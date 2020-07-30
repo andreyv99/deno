@@ -1,3 +1,4 @@
+// @ts-nocheck
 let launches = [];
 
 const numberHeading = 'No.'.padStart(5);
@@ -15,15 +16,24 @@ function initValues() {
 }
 
 function loadLaunches() {
-    // TODO: Once API is ready.
-    // Load launches and sort by flight number.
+    return fetch('/launches')
+        .then(launchesResponse => launchesResponse.json())
+        .then(fetchedLaunches => {
+            launches = fetchedLaunches.sort((a, b) => {
+                return a.flightNumber < b.flightNumber;
+            });
+        });
 }
 
 function loadPlanets() {
-    const planets = [{ kepler_name: 'X Æ A-12' }, { kepler_name: 'Beta Gamma B' }];
-    const planetSelector = document.getElementById('planets-selector');
-    planets.forEach(planet => {
-        planetSelector.innerHTML += `<option value="${planet.kepler_name}">${planet.kepler_name}</option>`;
+    fetch('planets').then(planets => {
+        const planetSelector = document.getElementById('planets-selector');
+
+        planets.json().then(data => {
+            data.forEach(planet => {
+                planetSelector.innerHTML += `<option value="${planet.kepler_name}">${planet.kepler_name}</option>`;
+            });
+        });
     });
 }
 
