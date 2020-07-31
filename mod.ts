@@ -1,7 +1,5 @@
-import * as log from 'https://deno.land/std/log/mod.ts';
-import { Application, send } from 'https://deno.land/x/oak@v5.0.0/mod.ts';
-
 import api from './api.ts';
+import { Application, log, send } from './deps.ts';
 
 const app = new Application();
 const PORT = 8000;
@@ -49,7 +47,7 @@ app.use(api.allowedMethods());
 
 app.use(async ctx => {
     const filePath = ctx.request.url.pathname;
-    const fileWhitelist = ['/index.html', '/javascripts/script.js', '/stylesheets/style.css', '/images/favicon.png'];
+    const fileWhitelist = ['/index.html', '/javascripts/script.js', '/stylesheets/style.css', '/images/favicon.png', '/videos/space.mp4'];
 
     if (fileWhitelist.includes(filePath)) {
         await send(ctx, filePath, {
